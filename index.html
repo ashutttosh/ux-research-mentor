@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UX Research Mentor — A Cowork plugin built from Tarah Srethwatanakul's UX Research Resource Guide</title>
+<meta name="description" content="A working UX research agent for Cowork / Claude Code. 11 skills covering interviews, surveys, usability testing, diary studies, AI-assisted analysis, research ops, and career coaching — backed by Tarah Srethwatanakul's curated knowledge base.">
+<meta property="og:title" content="UX Research Mentor — Cowork plugin">
+<meta property="og:description" content="11 skills + a 15-file knowledge base for UX researchers. Free, open-source, derived from Tarah Srethwatanakul's UX Research Resource Guide.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🔬%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-soft: #131313;
+    --bg-card: #1a1a1a;
+    --border: #262626;
+    --border-strong: #404040;
+    --text: #fafafa;
+    --text-muted: #a3a3a3;
+    --text-dim: #737373;
+    --accent: #ff5722;
+    --accent-soft: rgba(255, 87, 34, 0.1);
+    --accent-border: rgba(255, 87, 34, 0.3);
+    --green: #22c55e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  nav {
+    border-bottom: 1px solid var(--border);
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px; max-width: 1100px; margin: 0 auto;
+  }
+  .nav-brand { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .nav-brand .emoji { font-size: 18px; }
+  .nav-links { display: flex; gap: 24px; font-size: 14px; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--text); }
+
+  .hero { padding: 96px 0 64px; text-align: center; }
+  .attribution-banner {
+    display: inline-block;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    margin-bottom: 28px;
+    font-weight: 500;
+  }
+  .attribution-banner a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+  h1 {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(180deg, #fff 0%, #a3a3a3 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .tagline {
+    font-size: clamp(17px, 2vw, 20px);
+    color: var(--text-muted);
+    max-width: 720px;
+    margin: 0 auto 40px;
+  }
+  .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--text);
+    color: var(--bg);
+  }
+  .btn-primary:hover { transform: translateY(-1px); background: #fff; box-shadow: 0 8px 24px rgba(255,255,255,0.15); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .btn-secondary:hover { background: var(--bg-card); border-color: var(--text-muted); }
+
+  .meta-row {
+    display: flex; gap: 28px; justify-content: center; flex-wrap: wrap;
+    margin-top: 36px; font-size: 13px; color: var(--text-dim);
+  }
+  .meta-row span { display: inline-flex; align-items: center; gap: 6px; }
+  .meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+  section { padding: 72px 0; border-top: 1px solid var(--border); }
+  .section-eyebrow {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(28px, 3.5vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 17px;
+    max-width: 700px;
+    margin-bottom: 48px;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .skill-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 24px;
+    border-radius: 12px;
+    transition: all 0.2s;
+  }
+  .skill-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+  .skill-card .icon { font-size: 22px; margin-bottom: 14px; display: block; }
+  .skill-card h3 { font-size: 16px; margin-bottom: 8px; font-weight: 600; }
+  .skill-card .skill-id {
+    display: inline-block; font-family: ui-monospace, monospace; font-size: 11px;
+    background: var(--bg-soft); padding: 2px 8px; border-radius: 4px;
+    color: var(--text-muted); margin-bottom: 12px;
+  }
+  .skill-card p { font-size: 14px; color: var(--text-muted); line-height: 1.55; }
+
+  .kb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .kb-item {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: border-color 0.15s;
+  }
+  .kb-item:hover { border-color: var(--border-strong); }
+  .kb-item .num {
+    font-family: ui-monospace, monospace;
+    color: var(--text-dim); font-size: 12px;
+    flex-shrink: 0;
+  }
+  .kb-item code { font-family: ui-monospace, monospace; font-size: 13px; }
+
+  .install-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .install-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+  }
+  .install-step .step-num {
+    position: absolute;
+    top: -14px; left: 24px;
+    background: var(--accent);
+    color: #fff;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 14px;
+  }
+  .install-step h4 { font-size: 16px; margin-bottom: 10px; margin-top: 6px; font-weight: 600; }
+  .install-step p { font-size: 14px; color: var(--text-muted); }
+  .install-step code {
+    background: var(--bg-soft);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: ui-monospace, monospace;
+  }
+  .install-step pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 12px;
+    margin-top: 10px;
+    color: var(--text-muted);
+  }
+
+  .attribution-section {
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+    text-align: center;
+  }
+  .attribution-card {
+    background: var(--bg-card);
+    border: 1px solid var(--accent-border);
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .attribution-card h3 { font-size: 22px; margin-bottom: 14px; }
+  .attribution-card p { color: var(--text-muted); margin-bottom: 18px; }
+  .attribution-card .author { font-weight: 600; color: var(--text); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  footer a { color: var(--text-muted); text-decoration: none; margin: 0 12px; }
+  footer a:hover { color: var(--text); }
+  footer .copy { margin-top: 16px; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 64px 0 40px; }
+    section { padding: 56px 0; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand"><span class="emoji">🔬</span> UX Research Mentor</div>
+    <div class="nav-links">
+      <a href="#skills">Skills</a>
+      <a href="#knowledge-base">Knowledge base</a>
+      <a href="#install">Install</a>
+      <a href="#source">Source</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="attribution-banner">
+      Built from <a href="https://bit.ly/UXRguide" target="_blank" rel="noopener">Tarah Srethwatanakul's UX Research Resource Guide</a>
+    </div>
+    <h1>A working UX research<br>mentor for Cowork</h1>
+    <p class="tagline">
+      11 skills covering interviews, surveys, usability testing, diary studies, AI-assisted analysis,
+      research ops, and career coaching — backed by a 15-file knowledge base of the field's
+      best resources, curated by Tarah Srethwatanakul over a decade in fintech and big tech.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="/ux-research-mentor.plugin" download>
+        ⬇ Download plugin (75 KB)
+      </a>
+      <a class="btn btn-secondary" href="#install">Install instructions →</a>
+    </div>
+    <div class="meta-row">
+      <span><span class="meta-dot"></span> Free &amp; open-source</span>
+      <span>11 skills</span>
+      <span>15 KB files · ~2,000 lines</span>
+      <span>v1.0</span>
+    </div>
+  </div>
+</header>
+
+<section id="skills">
+  <div class="container">
+    <div class="section-eyebrow">What it does</div>
+    <h2 class="section-title">11 skills, one mentor</h2>
+    <p class="section-sub">
+      Every skill activates on natural language — just describe what you're trying to do.
+      No commands to memorize.
+    </p>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <span class="icon">🗺️</span>
+        <h3>Plan a research study</h3>
+        <div class="skill-id">plan-research-study</div>
+        <p>Pick the right method (interviews, surveys, usability, diary, A/B), write the plan, brief stakeholders.</p>
+      </div>
+      <div class="skill-card">
+        <span class="icon">🎙️</span>
+        <h3>Conduct interviews</h3>
+        <div class="skill-id">conduct-interviews</div>
+        <p>Five-block interview guides, Mom Test principles, moderation craft, structured note-taking.</p>
+      </div>
+      <div class="skill-card">
+        <span class="icon">📋</span>
+        <h3>Design a survey</h3>
+        <div class="skill-id">design-survey</div>
+        <p>Questionnaire structure, scale choice, sampling methods, sample-size planning.</p>
+      </div>
+      <div class="skill-card">
+        <span class="icon">🔍</span>
+        <h3>Usability testing</h3>
+        <div class="skill-id">usability-testing</div>
+        <p>Moderated and unmoderated test plans, task scripts, NN/g-style severity scoring.</p>
+      </div>
+      <div class="skill-card">
+        <span class="icon">📔</span>
+        <h3>Diary studies</h3>
+        <div class="skill-id">diary-studies</div>
+        <p>Longitudinal study setup, prompt design, monitoring, exit interviews, analysis.</p>
+      </div>
+      <div class="skill-card">
+        <span class="icon">🧩</span>
+        <h3>Analyze research</h3>
+        <div class="skill-id">analyze-research</div>
+        <p>Thematic analysis, affinity mapping, large-scale group analysis, GDS workshop format.</p>
+      </div>
+      <div class="skill-card">
+        <span class="icon">📊</span>
+        <h3>Quant UX research</h3>
+        <div class="skill-id">quant-ux-research</div>
+        <p>SUS, SEQ, NPS, benchmarking, confidence intervals, sample-size cheat sheet.</p>
+      </div>
+      <div class="skill-card">
+        <span class="icon">🤖</span>
+        <h3>AI research workflow</h3>
+        <div class="skill-id">ai-research-workflow</div>
+        <p>Caitlin Sullivan's Claude Code for Customer Insights approach + Saeideh Bakhshi's quant toolkit.</p>
+      </div>
+      <div class="skill-card">
+        <span class="icon">♿</span>
+        <h3>Accessibility research</h3>
+        <div class="skill-id">accessibility-research</div>
+        <p>Inclusive recruitment, AT-aware moderation, AR/spatial UX research.</p>
+      </div>
+      <div class="skill-card">
+        <span class="icon">⚙️</span>
+        <h3>Research ops</h3>
+        <div class="skill-id">research-ops</div>
+        <p>Participant recruitment, repositories, templates, governance, the four ReOps pillars.</p>
+      </div>
+      <div class="skill-card">
+        <span class="icon">🎯</span>
+        <h3>UXR career coach</h3>
+        <div class="skill-id">uxr-career-coach</div>
+        <p>Career transitions, job search, mentorship, salary benchmarks, negotiation tactics.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="knowledge-base">
+  <div class="container">
+    <div class="section-eyebrow">What it knows</div>
+    <h2 class="section-title">15 reference files, ~2,000 lines</h2>
+    <p class="section-sub">
+      Every blog, podcast, book, newsletter, mentorship program, job board, recruiting agency, and salary benchmark
+      from the source guide — fetched, summarized, structured for the agent to actually use.
+    </p>
+    <div class="kb-grid">
+      <div class="kb-item"><span class="num">01</span><code>methods-overview.md</code></div>
+      <div class="kb-item"><span class="num">02</span><code>practical-guides-and-templates.md</code></div>
+      <div class="kb-item"><span class="num">03</span><code>books.md</code></div>
+      <div class="kb-item"><span class="num">04</span><code>blogs.md</code></div>
+      <div class="kb-item"><span class="num">05</span><code>podcasts.md</code></div>
+      <div class="kb-item"><span class="num">06</span><code>newsletters.md</code></div>
+      <div class="kb-item"><span class="num">07</span><code>videos-and-channels.md</code></div>
+      <div class="kb-item"><span class="num">08</span><code>communities.md</code></div>
+      <div class="kb-item"><span class="num">09</span><code>mentorship.md</code></div>
+      <div class="kb-item"><span class="num">10</span><code>career-transitions.md</code></div>
+      <div class="kb-item"><span class="num">11</span><code>pathways-into-uxr.md</code></div>
+      <div class="kb-item"><span class="num">12</span><code>job-search.md</code></div>
+      <div class="kb-item"><span class="num">13</span><code>recruiting-agencies.md</code></div>
+      <div class="kb-item"><span class="num">14</span><code>compensation-and-negotiation.md</code></div>
+      <div class="kb-item"><span class="num">15</span><code>source-guide.md</code></div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="container">
+    <div class="section-eyebrow">Install</div>
+    <h2 class="section-title">Two minutes to install</h2>
+    <p class="section-sub">
+      Works with Cowork (Claude desktop app) and Claude Code. Both use the same plugin format.
+    </p>
+    <div class="install-steps">
+      <div class="install-step">
+        <div class="step-num">1</div>
+        <h4>Download the plugin</h4>
+        <p>Get <code>ux-research-mentor.plugin</code> — it's a 75 KB zip.</p>
+        <a class="btn btn-secondary" style="margin-top:12px" href="/ux-research-mentor.plugin" download>⬇ Download</a>
+      </div>
+      <div class="install-step">
+        <div class="step-num">2</div>
+        <h4>Install in Cowork or Claude Code</h4>
+        <p>Cowork: Settings → Plugins → Install from file → pick the <code>.plugin</code> file.</p>
+        <p style="margin-top:10px">Claude Code: drop the unzipped folder into your plugins directory and restart.</p>
+      </div>
+      <div class="install-step">
+        <div class="step-num">3</div>
+        <h4>Trigger a skill</h4>
+        <p>Just describe what you need:</p>
+        <pre>"Plan a usability test for our new
+checkout flow"
+
+"What's a fair UXR salary for L5
+at Google?"
+
+"Help me transition from academia
+to UXR"</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="source" class="attribution-section">
+  <div class="container">
+    <div class="attribution-card">
+      <h3>Credit where credit is due</h3>
+      <p>This plugin is a derivative work built entirely from
+        <strong class="author">Tarah Srethwatanakul's</strong> *UX Research Resource Guide* — a curated
+        collection she maintains for UX researchers at every stage. Tarah is a Staff Researcher
+        with 10+ years in fintech (Monzo), big tech (Meta), and independent consulting.</p>
+      <p>If this plugin helps you, the credit belongs to her curation. Read the original at:</p>
+      <a class="btn btn-primary" href="https://bit.ly/UXRguide" target="_blank" rel="noopener" style="margin-top: 8px">
+        bit.ly/UXRguide →
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>·
+    <a href="/ux-research-mentor.plugin" download>Download plugin</a>·
+    <a href="https://bit.ly/UXRguide" target="_blank" rel="noopener">Source guide</a>·
+    <a href="#install">Install</a>
+    <div class="copy">
+      MIT licensed · Free and open-source · A derivative work of Tarah Srethwatanakul's UX Research Resource Guide
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "ux-research-mentor",
+  "version": "1.0.0",
+  "description": "A working UX research mentor built from Tarah Srethwatanakul's UX Research Resource Guide. Helps plan and run studies (interviews, surveys, usability tests, diary studies, accessibility research, AI-assisted analysis), synthesize findings, run research ops, and navigate the UXR career — backed by a curated knowledge base of books, blogs, podcasts, newsletters, communities, mentorship, and job-search resources.",
+  "author": {
+    "name": "Ashutosh"
+  },
+  "source": {
+    "title": "The UX Research Resource Guide",
+    "maintained_by": "Tarah Srethwatanakul (Staff Researcher, ex-Monzo, ex-Meta)",
+    "url": "https://docs.google.com/document/d/1BuIbH6YVJEsvxBqjvD2uoM5p4NwII87if0tNDnRosGw/edit",
+    "short_url": "bit.ly/UXRguide",
+    "last_updated": "April 2026"
+  }
+}
