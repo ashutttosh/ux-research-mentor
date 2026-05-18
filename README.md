@@ -69,7 +69,9 @@ Just describe what you need:
 
 ## Live site
 
-The landing page is deployed at: [INSERT YOUR VERCEL URL HERE AFTER DEPLOY]
+🌐 **[uxresearch-lemon.vercel.app](https://uxresearch-lemon.vercel.app)**
+
+Download the plugin, read the docs, see all 11 skills and the full knowledge base index.
 
 ## How this was built
 
