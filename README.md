@@ -50,7 +50,7 @@ The plugin's `references/` folder contains 15 structured KB files mirroring the 
 
 ### Option B — Clone and use the unpacked source
 ```bash
-git clone https://github.com/YOUR-USERNAME/ux-research-mentor.git
+git clone https://github.com/ashutttosh/ux-research-mentor.git
 cd ux-research-mentor/plugin-source
 # Then drop the contents into your plugins directory
 ```
