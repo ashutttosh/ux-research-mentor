@@ -1,0 +1,23 @@
+{
+  "name": "primary",
+  "version": "1.0.0",
+  "description": "A Cowork / Claude Code plugin that turns **Tarah Srethwatanakul's** [UX Research Resource Guide](https://bit.ly/UXRguide) into a working assistant.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashutttosh/ux-research-mentor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ashutttosh/ux-research-mentor/issues"
+  },
+  "homepage": "https://github.com/ashutttosh/ux-research-mentor#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
